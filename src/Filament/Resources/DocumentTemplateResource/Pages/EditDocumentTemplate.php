@@ -2,7 +2,7 @@
 
 namespace Saccharine\Documents\Filament\Resources\DocumentTemplateResource\Pages;
 
-use App\Filament\Resources\DocumentTemplateResource;
+use Saccharine\Documents\Filament\Resources\DocumentTemplateResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 

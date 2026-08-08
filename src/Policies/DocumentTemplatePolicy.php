@@ -2,8 +2,8 @@
 
 namespace Saccharine\Documents\Policies;
 
-use App\Models\User;
-use App\Models\DocumentTemplate;
+use Saccharine\Documents\Models\User;
+use Saccharine\Documents\Models\DocumentTemplate;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class DocumentTemplatePolicy

@@ -2,7 +2,7 @@
 
 namespace Saccharine\Documents\Services;
 
-use App\Interfaces\FillablePdfInterface;
+use Saccharine\Documents\Interfaces\FillablePdfInterface;
 use Illuminate\Support\Arr;
 
 class PdftkService implements FillablePdfInterface

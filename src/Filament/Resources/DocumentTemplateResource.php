@@ -2,9 +2,9 @@
 
 namespace Saccharine\Documents\Filament\Resources;
 
-use App\Filament\Resources\DocumentTemplateResource\Pages;
-use App\Filament\Resources\DocumentTemplateResource\RelationManagers;
-use App\Models\DocumentTemplate;
+use Saccharine\Documents\Filament\Resources\DocumentTemplateResource\Pages;
+use Saccharine\Documents\Filament\Resources\DocumentTemplateResource\RelationManagers;
+use Saccharine\Documents\Models\DocumentTemplate;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -18,7 +18,7 @@ use Filament\Forms\Get;
 use FilamentTiptapEditor\TiptapEditor;
 use FilamentTiptapEditor\Enums\TiptapOutput; 
 
-use App\Models\DocumentCategory;
+use Saccharine\Documents\Models\DocumentCategory;
 
 class DocumentTemplateResource extends Resource
 {

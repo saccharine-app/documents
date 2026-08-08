@@ -2,7 +2,7 @@
 
 namespace Saccharine\Documents\Services;
 
-use App\Interfaces\HtmlToPdfInterface;
+use Saccharine\Documents\Interfaces\HtmlToPdfInterface;
 use Illuminate\Support\Facades\Http;
 
 class GotenbergService implements HtmlToPdfInterface

@@ -2,8 +2,10 @@
 
 namespace Saccharine\Documents\Services;
 
-use App\Interfaces\HtmlToPdfInterface;
-use App\Interfaces\FillablePdfInterface;
+use Saccharine\Documents\Interfaces\HtmlToPdfInterface;
+use Saccharine\Documents\Interfaces\FillablePdfInterface;
+use Saccharine\Documents\Models\DocumentTemplateVersion;
+use Saccharine\Documents\DTOs\DocumentContext;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Blade;

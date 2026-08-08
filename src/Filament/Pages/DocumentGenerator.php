@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
-use App\Services\DocumentGeneratorService;
+use Saccharine\Documents\Services\DocumentGeneratorService;
 
 class DocumentGenerator extends Page
 {
