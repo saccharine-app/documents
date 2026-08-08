@@ -46,4 +46,24 @@ class DocumentGeneratorService
     {
         return $this->fillableEngine->fill($templatePath, $payload);
     }
+
+    /**
+     * Create a payload for a document template version using the associated mapper class.
+     */
+    public function buildPayload(
+        DocumentTemplateVersion $version, 
+        Model $targetModel, 
+        DocumentContext $context
+    ): array {
+        $mapperClass = $version->dto_class;
+
+        if (!class_exists($mapperClass)) {
+            throw new \Exception("The mapper class [{$mapperClass}] defined on the template version does not exist.");
+        }
+
+        // Instantiate the resource, inject the context, and resolve the array
+        $mapper = (new $mapperClass($targetModel))->withContext($context);
+        
+        return $mapper->resolve();
+    }
 }
