@@ -14,19 +14,42 @@ class DocumentTemplate extends Model
 
     protected $guarded = [];
 
-    // Cast the JSONB content to a PHP array automatically
     protected $casts = [
-        'content' => 'array',
         'is_active' => 'boolean',
     ];
     
-    public function documents(): HasMany
-    {
-        return $this->hasMany(Document::class);
-    }
-
+    /**
+     * Get the category this template belongs to.
+     */
     public function documentCategory(): BelongsTo
     {
         return $this->belongsTo(DocumentCategory::class);
+    }
+    
+    /**
+     * Get all temporal versions of this template.
+     */
+    public function versions(): HasMany
+    {
+        return $this->hasMany(DocumentTemplateVersion::class);
+    }
+    
+    /**
+     * Helper to retrieve the currently active version based on temporal rules.
+     */
+    public function activeVersion(): ?DocumentTemplateVersion
+    {
+        return $this->versions()
+            ->where('status', 'published')
+            ->where(function ($query) {
+                $query->whereNull('effective_from')
+                      ->orWhere('effective_from', '<=', now());
+            })
+            ->where(function ($query) {
+                $query->whereNull('effective_until')
+                      ->orWhere('effective_until', '>', now());
+            })
+            ->latest('version_number')
+            ->first();
     }
 }
