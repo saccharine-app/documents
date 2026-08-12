@@ -1,0 +1,45 @@
+{
+    "name": "saccharine/documents",
+    "description": "Laravel PDF Generator and Document Manager",
+    "license": "MIT",
+    "keywords": ["laravel", "pdf", "documents"],
+    "type": "library",
+    "require": {
+        "php": "^8.3",
+        "illuminate/support": "^12.0 || ^13.0",
+        "awcodes/filament-tiptap-editor": "^3.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Saccharine\\Documents\\DocumentsServiceProvider"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Saccharine\\Documents\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Saccharine\\Documents\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Matthew Wegner",
+            "email": "mwegner@proton.me"
+        }
+    ],
+    "require-dev": {
+        "orchestra/testbench": "^11.1",
+        "pestphp/pest": "^4.7",
+        "pestphp/pest-plugin-laravel": "^4.1"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}
