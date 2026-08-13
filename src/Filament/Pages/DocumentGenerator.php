@@ -129,7 +129,8 @@ class DocumentGenerator extends Page implements HasForms
                         Radio::make('output_method')
                             ->label('Action')
                             ->options([
-                                'stream' => 'Stream to Browser (Preview)',
+                                'stream_inline' => 'Preview (Inline Browser Stream)',
+                                'stream_url' => 'Preview (Public Static Link)',
                                 'download' => 'Force Download PDF',
                                 'email' => 'Email to Address',
                             ])
@@ -206,12 +207,21 @@ class DocumentGenerator extends Page implements HasForms
                 echo $pdfContent;
             }, $filename, [
                 'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename="' . $filename . '"',
             ]);
         }
 
-        // Method B: Stream / Preview
-        if ($state['output_method'] === 'stream') {
+        // Method B: Inline Browser Stream (No disk write required)
+        if ($state['output_method'] === 'stream_inline') {
+            return response()->stream(function () use ($pdfContent) {
+                echo $pdfContent;
+            }, 200, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="' . $filename . '"',
+            ]);
+        }
+
+        // Method C: Static Public URL (Writes to disk, requires storage:link)
+        if ($state['output_method'] === 'stream_url') {
             $tempFilename = 'preview_' . Str::uuid() . '.pdf';
             
             try {
@@ -224,14 +234,12 @@ class DocumentGenerator extends Page implements HasForms
             }
 
             $url = asset('storage/temp_previews/' . $tempFilename);
-
-            // Redirect browser directly to the public preview link
             $this->redirect($url);
             
             return;
         }
 
-        // Method C: Email Routing
+        // Method D: Email Routing
         if ($state['output_method'] === 'email') {
             $email = $state['email_address'];
             
