@@ -25,7 +25,7 @@ return [
     */
     'engines' => [
         'gotenberg' => [
-            'url' => env('GOTENBERG_URL', 'http://localhost:3000'),
+            'url' => env('GOTENBERG_URL', 'http://gotenberg:3000'),
         ],
         
         'pdftk' => [
