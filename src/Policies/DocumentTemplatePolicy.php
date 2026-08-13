@@ -2,7 +2,7 @@
 
 namespace Saccharine\Documents\Policies;
 
-use Saccharine\Documents\Models\User;
+use App\Models\User;
 use Saccharine\Documents\Models\DocumentTemplate;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
