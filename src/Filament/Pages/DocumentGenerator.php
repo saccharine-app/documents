@@ -30,7 +30,7 @@ class DocumentGenerator extends Page implements HasForms
 
     protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-cog';
     protected static \UnitEnum|string|null $navigationGroup = 'System Utilities';
-    protected static string $view = 'saccharine-documents::filament.pages.document-generator';
+    protected string $view = 'saccharine-documents::filament.pages.document-generator';
     protected static ?string $title = 'Document Generator';
     protected static ?string $navigationLabel = 'Document Generator';
 

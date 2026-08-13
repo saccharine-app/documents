@@ -22,7 +22,7 @@ class DocumentWizard extends Page implements HasForms
 
     protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-sparkles';
     protected static \UnitEnum|string|null $navigationGroup = 'System Utilities';
-    protected static string $view = 'filament.pages.document-wizard';
+    protected string $view = 'filament.pages.document-wizard';
     protected static ?string $title = 'Document Wizard';
 
     // Hold the form state
