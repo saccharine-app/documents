@@ -19,7 +19,7 @@ use Filament\Notifications\Notification as FilamentNotification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-use Saccharine\Documents\Services\DocumentGeneratorService;
+use Saccharine\Documents\Services\DocumentEngine;
 use Saccharine\Documents\Support\DemoTemplates;
 use Closure;
 
@@ -137,7 +137,7 @@ class DocumentGenerator extends Page implements HasForms
             ->statePath('data');
     }
 
-    public function generatePdf(DocumentGeneratorService $documentGeneratorService)
+    public function generatePdf(DocumentEngine $documentEngine)
     {
         $state = $this->form->getState();
         $payload = json_decode($state['json_payload'], true);
@@ -147,7 +147,7 @@ class DocumentGenerator extends Page implements HasForms
 
             if (in_array($state['template_type'], ['html_blade', 'markdown'])) {
                 // Call the service for markup
-                $pdfContent = $documentGeneratorService->generateFromMarkup(
+                $pdfContent = $documentEngine->generateFromMarkup(
                     $state['html_content'], 
                     $payload, 
                     $state['template_type']
@@ -166,7 +166,7 @@ class DocumentGenerator extends Page implements HasForms
                 }
                 
                 // Call the service for PDF mapping
-                $pdfContent = $documentGeneratorService->generateFromFillablePdf($fullPath, $payload);
+                $pdfContent = $documentEngine->generateFromFillablePdf($fullPath, $payload);
             }
 
             if (!$pdfContent) {
