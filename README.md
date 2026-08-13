@@ -33,6 +33,35 @@ You can install the package via Composer:
 composer require saccharine/documents
 ```
 
+Publish the package configuration:
+
+```bash
+php artisan vendor:publish --tag="documents-config"
+```
+
+If your host application uses Filament v3, register the plugin in your Panel Provider:
+
+```php
+use Saccharine\Documents\Filament\SaccharineDocumentsPlugin;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        // ...
+        ->plugin(SaccharineDocumentsPlugin::make());
+}
+```
+
+## Development & Testing
+
+This package uses Pest PHP for unit and integration testing.
+
+To run the test suite:
+
+```bash
+vendor/bin/pest
+```
+
 ## **License**
 
 This package is open-source software licensed under the [MIT License](https://opensource.org/license/mit).
