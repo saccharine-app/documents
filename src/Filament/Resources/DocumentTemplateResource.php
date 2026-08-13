@@ -5,6 +5,7 @@ namespace Saccharine\Documents\Filament\Resources;
 use Saccharine\Documents\Filament\Resources\DocumentTemplateResource\Pages;
 use Saccharine\Documents\Filament\Resources\DocumentTemplateResource\RelationManagers;
 use Saccharine\Documents\Models\DocumentTemplate;
+use Filament\Schemas\Schema;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -24,13 +25,13 @@ class DocumentTemplateResource extends Resource
 {
     protected static ?string $model = DocumentTemplate::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-duplicate';
-    protected static ?string $navigationGroup = 'System Utilities';
+    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-document-duplicate';
+    protected static \UnitEnum|string|null $navigationGroup = 'System Utilities';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),

@@ -3,6 +3,7 @@
 namespace Saccharine\Documents\Filament\Pages;
 
 use Filament\Pages\Page;
+use Filament\Schemas\Schema;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Form;
@@ -27,8 +28,8 @@ class DocumentGenerator extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static ?string $navigationIcon = 'heroicon-o-cog';
-    protected static ?string $navigationGroup = 'System Utilities';
+    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-cog';
+    protected static \UnitEnum|string|null $navigationGroup = 'System Utilities';
     protected static string $view = 'saccharine-documents::filament.pages.document-generator';
     protected static ?string $title = 'Document Generator';
     protected static ?string $navigationLabel = 'Document Generator';
@@ -40,10 +41,10 @@ class DocumentGenerator extends Page implements HasForms
         $this->form->fill();
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Select::make('demo_preset')
                     ->label('Load Sample Template')
                     ->options([

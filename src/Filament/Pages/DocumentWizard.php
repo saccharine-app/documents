@@ -3,6 +3,7 @@
 namespace Saccharine\Documents\Filament\Pages;
 
 use Filament\Pages\Page;
+use Filament\Schemas\Schema;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Form;
@@ -19,8 +20,8 @@ class DocumentWizard extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static ?string $navigationIcon = 'heroicon-o-sparkles';
-    protected static ?string $navigationGroup = 'System Utilities';
+    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-sparkles';
+    protected static \UnitEnum|string|null $navigationGroup = 'System Utilities';
     protected static string $view = 'filament.pages.document-wizard';
     protected static ?string $title = 'Document Wizard';
 
@@ -46,10 +47,10 @@ class DocumentWizard extends Page implements HasForms
         ]);
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Wizard::make([
                     Step::make('Context')
                         ->description('Verify the target record')
