@@ -14,11 +14,13 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Notifications\Notification as FilamentNotification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Saccharine\Documents\Services\DocumentGeneratorService;
+use Saccharine\Documents\Support\DemoTemplates;
 use Closure;
 
 class DocumentGenerator extends Page implements HasForms
@@ -42,6 +44,25 @@ class DocumentGenerator extends Page implements HasForms
     {
         return $form
             ->schema([
+                Select::make('demo_preset')
+                    ->label('Load Sample Template')
+                    ->options([
+                        'contractor' => 'Construction/Renovation Contract',
+                        'blank' => 'Blank Template',
+                    ])
+                    ->live()
+                    ->afterStateUpdated(function (Set $set, ?string $state) {
+                        if ($state === 'contractor') {
+                            $set('template_type', 'html_blade');
+                            $set('html_content', DemoTemplates::getContractorHtml());
+                            $set('json_payload', DemoTemplates::getContractorJson());
+                        } elseif ($state === 'blank') {
+                            $set('html_content', '');
+                            $set('json_payload', '{}');
+                        }
+                    })
+                    ->columnSpanFull(),
+                    
                 Grid::make(2)
                     ->schema([
                         Section::make('1. Template Definition')
@@ -63,8 +84,7 @@ class DocumentGenerator extends Page implements HasForms
                                     ->visible(fn (Get $get) => in_array($get('template_type'), ['html_blade', 'markdown']))
                                     ->required(fn (Get $get) => in_array($get('template_type'), ['html_blade', 'markdown']))
                                     ->extraInputAttributes(['style' => 'font-family: monospace;'])
-                                    ->rows(15)
-                                    ->default("<h1>Contract for {{ \$name }}</h1>\n<p>Generated on: {{ \$date }}</p>"),
+                                    ->rows(15),
                                 
                                 FileUpload::make('pdf_template')
                                     ->label('Upload Blank Fillable PDF')
@@ -82,7 +102,6 @@ class DocumentGenerator extends Page implements HasForms
                                     ->required()
                                     ->extraInputAttributes(['style' => 'font-family: monospace;'])
                                     ->rows(15)
-                                    ->default("{\n  \"name\": \"John Doe\",\n  \"date\": \"2026-07-11\"\n}")
                                     ->rules([
                                         fn () => function (string $attribute, $value, Closure $fail) {
                                             json_decode($value);
