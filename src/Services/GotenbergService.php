@@ -9,7 +9,8 @@ class GotenbergService implements HtmlToPdfInterface
 {
     public function convertHtml(string $html): string
     {
-        $gotenbergUrl = env('GOTENBERG_URL', 'http://localhost:3000');
+        // Pull safely from the merged config
+        $gotenbergUrl = config('documents.engines.gotenberg.url', 'http://localhost:3000');
 
         $response = Http::attach(
             'files', $html, 'index.html'
