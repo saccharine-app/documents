@@ -59,6 +59,14 @@ class DocumentGenerator extends Page implements HasForms
                             $set('template_type', 'html_blade');
                             $set('html_content', DemoTemplates::getContractorHtml());
                             $set('json_payload', DemoTemplates::getContractorJson());
+                        } elseif ($state === 'invoice') {
+                            $set('template_type', 'html_blade');
+                            $set('html_content', DemoTemplates::getSimpleInvoiceHtml());
+                            $set('json_payload', DemoTemplates::getSimpleInvoiceJson());
+                        } elseif ($state === 'nda') {
+                            $set('template_type', 'markdown');
+                            $set('html_content', DemoTemplates::getNdaMarkdown());
+                            $set('json_payload', DemoTemplates::getNdaJson());
                         } elseif ($state === 'blank') {
                             $set('html_content', '');
                             $set('json_payload', '{}');
