@@ -48,7 +48,9 @@ class DocumentGenerator extends Page implements HasForms
                 Select::make('demo_preset')
                     ->label('Load Sample Template')
                     ->options([
-                        'contractor' => 'Construction/Renovation Contract',
+                        'nda' => 'Standard NDA (Markdown)',
+                        'invoice' => 'Simple B2B Invoice (Basic HTML)',
+                        'contractor' => 'Construction/Renovation Contract (Advanced HTML)',
                         'blank' => 'Blank Template',
                     ])
                     ->live()

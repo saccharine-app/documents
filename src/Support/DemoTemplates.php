@@ -152,4 +152,124 @@ HTML;
 }
 JSON;
     }
+
+    // --- SIMPLE BLADE INVOICE (B2B SaaS / Consulting) ---
+    public static function getSimpleInvoiceHtml(): string
+    {
+        return <<<'HTML'
+<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+    <h1 style="color: #2563eb;">INVOICE</h1>
+    <p><strong>Invoice #:</strong> {{ $invoice_number }}<br>
+    <strong>Date:</strong> {{ $date }}</p>
+
+    <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+
+    <div style="display: flex; justify-content: space-between; margin-bottom: 30px;">
+        <div>
+            <h3 style="margin: 0 0 5px 0;">Billed To:</h3>
+            {{ $client['name'] }}<br>
+            {{ $client['company'] }}<br>
+            {{ $client['email'] }}
+        </div>
+        <div style="text-align: right;">
+            <h3 style="margin: 0 0 5px 0;">Payable To:</h3>
+            Saccharine Tech Solutions<br>
+            contact@saccharinetech.com
+        </div>
+    </div>
+
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+        <thead>
+            <tr style="background-color: #f8fafc; border-bottom: 2px solid #cbd5e1;">
+                <th style="padding: 10px; text-align: left;">Description</th>
+                <th style="padding: 10px; text-align: right;">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($line_items as $item)
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <td style="padding: 10px;">{{ $item['description'] }}</td>
+                    <td style="padding: 10px; text-align: right;">${{ number_format($item['amount'], 2) }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    <h2 style="text-align: right; color: #0f172a;">Total Due: ${{ number_format($total_due, 2) }}</h2>
+    <p style="text-align: center; font-size: 12px; color: #64748b; margin-top: 40px;">
+        Payment is due within 30 days. Thank you for your business!
+    </p>
+</div>
+HTML;
+    }
+
+    public static function getSimpleInvoiceJson(): string
+    {
+        return <<<'JSON'
+{
+  "invoice_number": "INV-2026-0899",
+  "date": "2026-08-13",
+  "client": {
+    "name": "Alice Wonderland",
+    "company": "Looking Glass Corp",
+    "email": "alice@lookingglass.io"
+  },
+  "line_items": [
+    { "description": "Cloud Infrastructure Audit", "amount": 1500.00 },
+    { "description": "API Integration Retainer (August)", "amount": 3200.00 },
+    { "description": "Emergency Server Patching", "amount": 450.00 }
+  ],
+  "total_due": 5150.00
+}
+JSON;
+    }
+
+    // --- MARKDOWN NDA (Freelance / Corporate HR) ---
+    public static function getNdaMarkdown(): string
+    {
+        return <<<'MD'
+# Mutual Non-Disclosure Agreement
+
+**Effective Date:** {{ $effective_date }}
+
+This Mutual Non-Disclosure Agreement (the "Agreement") is entered into by and between **{{ $party_a }}** ("Disclosing Party") and **{{ $party_b }}** ("Receiving Party").
+
+## 1. Definition of Confidential Information
+
+"Confidential Information" means any data or information that is proprietary to the Disclosing Party and not generally known to the public, whether in tangible or intangible form, including, but not limited to:
+* Business plans and financial data
+* Proprietary algorithms and software code
+* Client lists and marketing strategies
+
+## 2. Obligations of Receiving Party
+
+The Receiving Party agrees to hold and maintain the Confidential Information in strictest confidence for a period of **{{ $term_years }} years** from the Effective Date. The Receiving Party shall carefully restrict access to Confidential Information to employees, contractors, and third parties as is reasonably required.
+
+## 3. Exclusions
+
+This Agreement does not apply to any information that:
+1. Was publicly known and made generally available in the public domain prior to the time of disclosure.
+2. Becomes publicly known and made generally available after disclosure through no action or inaction of the Receiving Party.
+
+**Signatures:**
+
+___________________________  
+*{{ $party_a }} Representative*
+
+___________________________  
+*{{ $party_b }} Representative*
+MD;
+    }
+
+    public static function getNdaJson(): string
+    {
+        return <<<'JSON'
+{
+  "effective_date": "2026-08-13",
+  "party_a": "Saccharine Software Holdings",
+  "party_b": "Globex Development Partners",
+  "term_years": 3
+}
+JSON;
+    }
 }
