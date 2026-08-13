@@ -54,6 +54,9 @@ class DocumentsServiceProvider extends ServiceProvider
             __DIR__.'/../config/documents.php' => config_path('documents.php'),
         ], 'documents-config');
 
+        // Register package views (e.g., resources/views mapped to 'saccharine-documents')
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'saccharine-documents');
+
         // Conditionally load Filament resources and pages
         if (class_exists(\Filament\FilamentServiceProvider::class)) {
             $this->registerFilamentComponents();

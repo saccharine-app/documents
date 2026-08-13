@@ -29,7 +29,7 @@ class DocumentGenerator extends Page implements HasForms
 
     protected static ?string $navigationIcon = 'heroicon-o-cog';
     protected static ?string $navigationGroup = 'System Utilities';
-    protected static string $view = 'filament.pages.document-generator';
+    protected static string $view = 'saccharine-documents::filament.pages.document-generator';
     protected static ?string $title = 'Document Generator';
     protected static ?string $navigationLabel = 'Document Generator';
 
