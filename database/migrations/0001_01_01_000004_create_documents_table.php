@@ -11,7 +11,6 @@ return new class extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->uuid('id')->primary();
             
-            // Replaces at_need_case_id, care_profile_id, etc.
             $table->uuidMorphs('documentable'); 
             
             $table->foreignUuid('document_template_version_id')->constrained('document_template_versions')->restrictOnDelete();

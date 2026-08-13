@@ -11,18 +11,11 @@ class DocumentGenerationRun extends Model
     use HasUuids;
 
     protected $fillable = [
-        'care_profile_id',
-        'document_category_id',
         'user_id',
         'status',
         'output_preference',
         'configuration',
     ];
-
-    public function careProfile(): BelongsTo
-    {
-        return $this->belongsTo(CareProfile::class, 'care_profile_id');
-    }
 
     public function userId(): BelongsTo
     {

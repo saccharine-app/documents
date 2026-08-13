@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('document_generation_runs', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('care_profile_id')->constrained('care_profiles')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->enum('status', ['pending', 'processing', 'completed', 'failed']);
             $table->enum('output_preference', ['download_zip', 'save_to_case', 'email_to_family']);

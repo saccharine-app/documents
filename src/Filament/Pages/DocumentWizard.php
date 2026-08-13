@@ -41,7 +41,6 @@ class DocumentWizard extends Page implements HasForms
     {
         // Initialize the form with data from the URL if present
         $this->form->fill([
-            'care_profile_id' => $this->profile,
             'target_type' => $this->target_type,
             'target_id' => $this->target_id,
         ]);
@@ -55,16 +54,12 @@ class DocumentWizard extends Page implements HasForms
                     Step::make('Context')
                         ->description('Verify the target record')
                         ->schema([
-                            Select::make('care_profile_id')
-                                ->label('Care Profile')
-                                ->options([]) // TODO: Pluck Care Profiles (e.g., "Doe, John")
-                                ->required(),
                             Select::make('target_type')
                                 ->label('Record Type')
                                 ->options([
-                                    'at_need' => 'At-Need Case',
-                                    'pre_need' => 'Pre-Need Contract',
-                                    'imminent' => 'Imminent Record',
+                                    'A' => 'A',
+                                    'B' => 'B',
+                                    'C' => 'C',
                                 ])
                                 ->required()
                                 ->live(), // Re-render when changed so we can fetch specific records below
