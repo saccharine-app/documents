@@ -11,6 +11,8 @@ use Filament\Schemas\Components\Utilities\Set;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Form;
+use Filament\Forms\Components\CodeEditor;
+use Filament\Forms\Components\CodeEditor\Enums\Language;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
@@ -74,54 +76,54 @@ class DocumentGenerator extends Page implements HasForms
                     })
                     ->columnSpanFull(),
                     
-                Grid::make(2)
+                Section::make('1. Template Definition')
+                    ->columnSpan(1)
+                    ->description('Provide the raw template file or markup.')
                     ->schema([
-                        Section::make('1. Template Definition')
-                            ->columnSpan(1)
-                            ->description('Provide the raw template file or markup.')
-                            ->schema([
-                                Select::make('template_type')
-                                    ->label('Template Format')
-                                    ->options([
-                                        'html_blade' => 'HTML / Laravel Blade',
-                                        'markdown' => 'Markdown',
-                                        'fillable_pdf' => 'Fillable PDF Document',
-                                    ])
-                                    ->required()
-                                    ->live(),
-                                
-                                Textarea::make('html_content')
-                                    ->label('Template Content')
-                                    ->visible(fn (Get $get) => in_array($get('template_type'), ['html_blade', 'markdown']))
-                                    ->required(fn (Get $get) => in_array($get('template_type'), ['html_blade', 'markdown']))
-                                    ->extraInputAttributes(['style' => 'font-family: monospace;'])
-                                    ->rows(15),
-                                
-                                FileUpload::make('pdf_template')
-                                    ->label('Upload Blank Fillable PDF')
-                                    ->acceptedFileTypes(['application/pdf'])
-                                    ->visible(fn (Get $get) => $get('template_type') === 'fillable_pdf')
-                                    ->required(fn (Get $get) => $get('template_type') === 'fillable_pdf'),
-                            ]),
+                        Select::make('template_type')
+                            ->label('Template Format')
+                            ->options([
+                                'html_blade' => 'HTML / Laravel Blade',
+                                'markdown' => 'Markdown',
+                                'fillable_pdf' => 'Fillable PDF Document',
+                            ])
+                            ->required()
+                            ->live(),
+                        
+                        CodeEditor::make('html_content')
+                            ->label('Template Content')
+                            ->visible(fn (Get $get) => in_array($get('template_type'), ['html_blade', 'markdown']))
+                            ->required(fn (Get $get) => in_array($get('template_type'), ['html_blade', 'markdown']))
+                            // Dynamically switch the language highlighting based on the selected type
+                            ->language(fn (Get $get) => 
+                                $get('template_type') === 'markdown' ? Language::Markdown : Language::Html)
+                            ->columnSpanFull(),
+                        
+                        FileUpload::make('pdf_template')
+                            ->label('Upload Blank Fillable PDF')
+                            ->acceptedFileTypes(['application/pdf'])
+                            ->visible(fn (Get $get) => $get('template_type') === 'fillable_pdf')
+                            ->required(fn (Get $get) => $get('template_type') === 'fillable_pdf')
+                            ->storeFiles(false),
+                    ]),
 
-                        Section::make('2. Data Payload')
-                            ->columnSpan(1)
-                            ->description('Provide the JSON object to inject into the template placeholders.')
-                            ->schema([
-                                Textarea::make('json_payload')
-                                    ->label('JSON Data')
-                                    ->required()
-                                    ->extraInputAttributes(['style' => 'font-family: monospace;'])
-                                    ->rows(15)
-                                    ->rules([
-                                        fn () => function (string $attribute, $value, Closure $fail) {
-                                            json_decode($value);
-                                            if (json_last_error() !== JSON_ERROR_NONE) {
-                                                $fail('The payload must be a valid JSON string.');
-                                            }
-                                        },
-                                    ]),
-                            ]),
+                Section::make('2. Data Payload')
+                    ->columnSpan(1)
+                    ->description('Provide the JSON object to inject into the template placeholders.')
+                    ->schema([
+                        CodeEditor::make('json_payload')
+                            ->label('JSON Data')
+                            ->required()
+                            ->language(Language::Json)
+                            ->rules([
+                                fn () => function (string $attribute, $value, Closure $fail) {
+                                    json_decode($value);
+                                    if (json_last_error() !== JSON_ERROR_NONE) {
+                                        $fail('The payload must be a valid JSON string.');
+                                    }
+                                },
+                            ])
+                            ->columnSpanFull(),
                     ]),
 
                 Section::make('3. Output Configuration')
@@ -165,20 +167,26 @@ class DocumentGenerator extends Page implements HasForms
                     $state['template_type']
                 );
             } elseif ($state['template_type'] === 'fillable_pdf') {
-                $uploadedPath = $state['pdf_template'];
-                
-                if (!$uploadedPath) {
+                // Filament returns an array of files even if multiple() isn't set
+                $uploadedFiles = $state['pdf_template'] ?? [];
+                $uploadedFile = is_array($uploadedFiles) ? 
+                    array_values($uploadedFiles)[0] ?? null : $uploadedFiles;
+
+                if (!$uploadedFile) {
                     throw new \Exception('Please upload a fillable PDF template.');
                 }
                 
-                $fullPath = storage_path('app/public/' . $uploadedPath);
+                // Extract the absolute path straight from the Livewire temporary file
+                $fullPath = $uploadedFile->getRealPath();
                 
                 if (!file_exists($fullPath)) {
-                    throw new \Exception('Uploaded template file not found.');
+                    throw new \Exception("Uploaded template file not found at: {$fullPath}");
                 }
                 
-                // Call the service for PDF mapping
+                // Feed the engine
                 $pdfContent = $documentEngine->generateFromFillablePdf($fullPath, $payload);
+                
+                // No manual Storage::delete() needed!
             }
 
             if (!$pdfContent) {
