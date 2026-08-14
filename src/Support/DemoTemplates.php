@@ -11,7 +11,7 @@ class DemoTemplates
     body { font-family: sans-serif; font-size: 14px; color: #333; line-height: 1.4; }
     .header { text-align: center; border-bottom: 2px solid #ccc; padding-bottom: 10px; margin-bottom: 20px; }
     .grid { display: flex; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; }
-    .col { width: 48%; }
+    .col { width: 46%; }
     .category-box { border: 1px solid #eee; padding: 10px; border-radius: 4px; margin-bottom: 20px; }
     table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
     th, td { padding: 6px; border-bottom: 1px solid #f9f9f9; text-align: left; }
