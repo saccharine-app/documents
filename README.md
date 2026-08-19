@@ -4,6 +4,8 @@ A modular, format-agnostic document hydration and management engine for Laravel.
 
 This package provides a flexible pipeline for compiling dynamic templates—such as Laravel Blade, Markdown, or fillable PDFs—with structured data payloads. It supports headless generation for background automation (e.g., process execution engines) as well as rich UI integration for Filament admin panels.
 
+*Status: v0.1.1-alpha. This package is currently in active early development. The database schema, APIs, and scaffolding commands are subject to change without notice. It is not yet recommended for production environments*
+
 ---
 
 ## Features
