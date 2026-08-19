@@ -7,8 +7,8 @@ use Filament\Schemas\Schema;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Form;
-use Filament\Forms\Components\Wizard;
-use Filament\Forms\Components\Wizard\Step;
+use Filament\Schemas\Components\Wizard;
+use Filament\Schemas\Components\Wizard\Step;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Radio;
@@ -22,7 +22,7 @@ class DocumentWizard extends Page implements HasForms
 
     protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-sparkles';
     protected static \UnitEnum|string|null $navigationGroup = 'System Utilities';
-    protected string $view = 'filament.pages.document-wizard';
+    protected string $view = 'saccharine-documents::filament.pages.document-wizard';
     protected static ?string $title = 'Document Wizard';
 
     // Hold the form state
