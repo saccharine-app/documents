@@ -1,0 +1,40 @@
+laravel: '@testbench'
+
+providers:
+  - Saccharine\Documents\DocumentsServiceProvider
+  - Workbench\App\Providers\WorkbenchServiceProvider
+  # The Filament panel below is optional and only loads when Filament is
+  # installed (it is not required to exercise the PDF pipeline). Enable it in an
+  # environment that has `filament/filament` present:
+  # - Workbench\App\Providers\Filament\FilamentPanelProvider
+
+migrations:
+  - workbench/database/migrations
+
+seeders:
+  - Workbench\Database\Seeders\DatabaseSeeder
+
+workbench:
+  start: '/'
+  install: true
+  auth: true
+  discovers:
+    web: true
+    api: true
+    commands: true
+    components: false
+    factories: true
+    views: false
+  build:
+    - asset-publish
+    - create-sqlite-db
+    - db-wipe
+    - migrate-fresh:
+        --seed: true
+        --seeder: Workbench\Database\Seeders\DatabaseSeeder
+  assets:
+    - laravel-assets
+  sync:
+    - from: storage
+      to: workbench/storage
+      reverse: true

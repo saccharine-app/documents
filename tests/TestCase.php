@@ -3,34 +3,27 @@
 namespace Saccharine\Documents\Tests;
 
 use Orchestra\Testbench\TestCase as Orchestra;
+use Orchestra\Testbench\Concerns\WithWorkbench;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Support\Facades\Gate;
-use Saccharine\Documents\DocumentsServiceProvider;
 
 class TestCase extends Orchestra
 {
+    use WithWorkbench;
     use RefreshDatabase;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // This ensures Laravel's core schema migrations (like users) are run if needed
         $this->loadLaravelMigrations();
-
-        // Automatically grant BPMN gates during test runs so they don't throw 403s
-        // The '?' is critical here! It tells Laravel to run this even for guests.
-        Gate::before(function (?Authenticatable $user, $ability) {
-            if (str_starts_with($ability, 'bpmn:')) {
-                return true; // Auto-pass all BPMN permissions during testing
-            }
-        });
     }
 
     /**
      * Define environment setup.
-     * This is where we mock the .env variables for Testbench.
+     *
+     * Workbench reads package providers from `testbench.yaml`, so they are no
+     * longer registered here. This hook only tunes runtime config for tests.
      */
     protected function getEnvironmentSetUp($app)
     {
@@ -48,21 +41,13 @@ class TestCase extends Orchestra
     }
 
     /**
-     * Boot the package's service provider.
-     */
-    protected function getPackageProviders($app)
-    {
-        return [
-            DocumentsServiceProvider::class,
-        ];
-    }
-
-    /**
-     * Tell Testbench to run the package's internal database migrations.
+     * Load the package's database migrations.
+     *
+     * Workbench additionally loads `workbench/database/migrations`, but the
+     * package migrations are loaded by the DocumentsServiceProvider.
      */
     protected function defineDatabaseMigrations()
     {
-        // Then load our package's migrations
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
     }
 }
