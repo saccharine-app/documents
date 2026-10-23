@@ -62,28 +62,4 @@ class DocumentsServiceProvider extends ServiceProvider
             $this->registerFilamentComponents();
         }
     }
-
-    /**
-     * Register Filament UI components only if the host app uses Filament.
-     */
-    protected function registerFilamentComponents(): void
-    {
-        // In Filament v3, a host app's PanelProvider usually registers packages via a Plugin class.
-        // However, for the Service Provider to register Livewire components natively 
-        // to bypass needing a Plugin registration in the host app, Livewire can be used directly here:
-        
-        \Livewire\Livewire::component(
-            'saccharine.documents.pages.document-generator', 
-            \Saccharine\Documents\Filament\Pages\DocumentGenerator::class
-        );
-        
-        \Livewire\Livewire::component(
-            'saccharine.documents.pages.document-wizard', 
-            \Saccharine\Documents\Filament\Pages\DocumentWizard::class
-        );
-
-        // Note: For full Filament v3 integration, it is standard to create a `DocumentsPlugin` 
-        // that implements `Filament\Contracts\Plugin` where the host app registers resources.
-        // For immediate demoability, we ensure the classes exist and Livewire knows about them.
-    }
 }

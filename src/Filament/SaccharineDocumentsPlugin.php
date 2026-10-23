@@ -15,6 +15,16 @@ class SaccharineDocumentsPlugin implements Plugin
         return 'saccharine-documents';
     }
 
+    public function getPluginName(): string
+    {
+        return 'Document Generation';
+    }
+
+    public function getNavigationIcon(): string
+    {
+        return 'heroicon-o-document-text';
+    }
+
     public function register(Panel $panel): void
     {
         $panel
@@ -24,12 +34,13 @@ class SaccharineDocumentsPlugin implements Plugin
             ->pages([
                 DocumentGenerator::class,
                 DocumentWizard::class,
-            ]);
+            ])
+            ->middleware([]);
     }
 
     public function boot(Panel $panel): void
     {
-        // 
+        //
     }
 
     public static function make(): static
